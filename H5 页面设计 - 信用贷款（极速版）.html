@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>信用贷款申请 - 合惠银</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background: white;
+            border-radius: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .status-bar {
+            height: 44px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-size: 12px;
+        }
+        
+        .nav-bar {
+            height: 50px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: white;
+        }
+        
+        .back-btn {
+            font-size: 20px;
+            margin-right: 15px;
+            cursor: pointer;
+        }
+        
+        .nav-title {
+            font-size: 17px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            padding-right: 20px;
+        }
+        
+        .content {
+            padding: 20px;
+            overflow-y: auto;
+            height: calc(812px - 94px);
+            background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%);
+        }
+        
+        /* 顶部提示 */
+        .notice-bar {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+            padding: 12px 15px;
+            margin: -20px -20px 20px -20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #e65100;
+        }
+        
+        .notice-icon {
+            font-size: 16px;
+        }
+        
+        /* 核心卖点横幅 - 突出当天放款 */
+        .hero-banner {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .speed-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: #78350f;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .hero-title {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+        
+        .hero-subtitle {
+            font-size: 14px;
+            opacity: 0.95;
+            margin-bottom: 16px;
+        }
+        
+        .hero-features {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+        
+        .hero-feature-item {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 12px 8px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .hero-feature-value {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .hero-feature-label {
+            font-size: 11px;
+            opacity: 0.9;
+        }
+        
+        /* 立即申请按钮区域 - 第一眼看到 */
+        .cta-section {
+            margin-bottom: 25px;
+        }
+        
+        .cta-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            border: none;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(245,158,11,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(245,158,11,0.5);
+        }
+        
+        .cta-button:active {
+            transform: scale(0.98);
+        }
+        
+        .cta-subtext {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        
+        /* 成功案例 */
+        .success-cases {
+            margin-bottom: 25px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .case-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .case-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #78350f;
+            margin-bottom: 10px;
+        }
+        
+        .case-detail {
+            font-size: 12px;
+            color: #92400e;
+            line-height: 1.8;
+        }
+        
+        .case-highlight {
+            color: #b45309;
+            font-weight: 700;
+        }
+        
+        .repayment-method {
+            display: inline-block;
+            background: rgba(180,83,9,0.15);
+            color: #b45309;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+        
+        /* 产品优势 */
+        .advantages-section {
+            margin-bottom: 25px;
+        }
+        
+        .advantage-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 15px;
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #e5e7eb;
+            transition: all 0.3s;
+        }
+        
+        .advantage-item:hover {
+            border-color: #10b981;
+            box-shadow: 0 4px 12px rgba(16,185,129,0.1);
+        }
+        
+        .advantage-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+        
+        .advantage-text {
+            flex: 1;
+        }
+        
+        .advantage-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        
+        .advantage-desc {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+        
+        /* 申请表单 */
+        .form-section {
+            margin-bottom: 25px;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+        }
+        
+        .form-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 8px;
+            display: block;
+        }
+        
+        .required {
+            color: #ef4444;
+            margin-right: 4px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: #f9fafb;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+            background: white;
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16,185,129,0.1);
+            background: white;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(16,185,129,0.3);
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16,185,129,0.4);
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .form-tip {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+        
+        /* 温馨提示 */
+        .warm-tip {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .warm-tip-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #78350f;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .warm-tip-content {
+            font-size: 12px;
+            color: #92400e;
+            line-height: 1.8;
+        }
+        
+        .warm-tip-disclaimer {
+            font-size: 11px;
+            color: #b45309;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #fcd34d;
+            font-style: italic;
+        }
+        
+        /* 底部说明 */
+        .footer-info {
+            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+            padding: 20px 15px;
+            margin: -20px -20px -20px -20px;
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+            line-height: 1.8;
+            border-top: 1px solid #d1fae5;
+        }
+        
+        .footer-highlight {
+            color: #059669;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>中国移动</span>
+            <span>12:30</span>
+            <span>🔋 85%</span>
+        </div>
+        
+        <!-- 导航栏 -->
+        <div class="nav-bar">
+            <div class="back-btn">←</div>
+            <div class="nav-title">信用贷款申请</div>
+        </div>
+        
+        <!-- 内容区 -->
+        <div class="content">
+            <!-- 顶部提示 -->
+            <div class="notice-bar">
+                <span class="notice-icon">ℹ️</span>
+                <span>很高兴为您提供咨询服务，您的贷款由正规持牌机构审批放款</span>
+            </div>
+            
+            <!-- 核心卖点横幅 - 突出当天放款 -->
+            <div class="hero-banner">
+                <div class="speed-badge">⚡ 最快当天放款</div>
+                <div class="hero-title">💰 信用贷款</div>
+                <div class="hero-subtitle">单笔最高 100 万 · 利率 3% 起 · 最长 84 期</div>
+            </div>
+            
+            <!-- 立即申请按钮 - 第一眼看到 -->
+            <div class="cta-section">
+                <button class="cta-button" onclick="scrollToForm()">
+                    📝 立即申请
+                </button>
+                <div class="cta-subtext">
+                    🔒 30 秒完成申请 · 信息加密保护
+                </div>
+            </div>
+            
+            <!-- 成功案例 - 统一 30 万，两种还款方式对比 -->
+            <div class="success-cases">
+                <div class="section-title">
+                    <span>✅</span>
+                    <span>真实案例参考</span>
+                </div>
+                
+                <div class="case-card">
+                    <div class="case-title">
+                        王先生，32 岁，上班族 | 审批额度 30 万元
+                        <span class="repayment-method">先息后本</span>
+                    </div>
+                    <div class="case-detail">
+                        年化利率：<span class="case-highlight">3.5%</span> | 分期：<span class="case-highlight">36 期</span><br>
+                        月供：<span class="case-highlight">875 元</span>（仅还利息）<br>
+                        <small>用途：资金周转，到期一次性还本，压力更小</small>
+                    </div>
+                </div>
+                
+                <div class="case-card">
+                    <div class="case-title">
+                        陈女士，29 岁，上班族 | 审批额度 30 万元
+                        <span class="repayment-method">等额本息</span>
+                    </div>
+                    <div class="case-detail">
+                        年化利率：<span class="case-highlight">3.2%</span> | 分期：<span class="case-highlight">36 期</span><br>
+                        月供：<span class="case-highlight">8,751 元</span>（本金 + 利息）<br>
+                        <small>用途：家庭消费，每月固定还款，规划清晰</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 产品优势 -->
+            <div class="advantages-section">
+                <div class="section-title">
+                    <span>✨</span>
+                    <span>为什么选择我们</span>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon">⚡</div>
+                    <div class="advantage-text">
+                        <div class="advantage-title">最快当天放款</div>
+                        <div class="advantage-desc">智能风控系统，最快 30 分钟出结果，资料齐全当天可放款</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon">💰</div>
+                    <div class="advantage-text">
+                        <div class="advantage-title">超低利率</div>
+                        <div class="advantage-desc">年化利率低至 3% 起，优质客户享优惠，远低于信用卡分期</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon">📅</div>
+                    <div class="advantage-text">
+                        <div class="advantage-title">灵活分期</div>
+                        <div class="advantage-desc">12-84 期自由选择，先息后本/等额本息/随借随还多种还款方式</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon">🔒</div>
+                    <div class="advantage-text">
+                        <div class="advantage-title">无抵押担保</div>
+                        <div class="advantage-desc">纯信用贷款，无需房产车辆抵押，无需担保人，手续简便</div>
+                    </div>
+                </div>
+                
+                <div class="advantage-item">
+                    <div class="advantage-icon">📱</div>
+                    <div class="advantage-text">
+                        <div class="advantage-title">线上线下都能申请</div>
+                        <div class="advantage-desc">线上手机申请或线下网点办理，两种方式自由选择，灵活便捷</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 申请表单 -->
+            <div class="form-section" id="applyForm">
+                <div class="section-title">
+                    <span>📝</span>
+                    <span>立即申请</span>
+                </div>
+                <div class="form-card">
+                    <form id="creditForm">
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="required">*</span>
+                                姓名
+                            </label>
+                            <input type="text" class="form-input" placeholder="请输入您的真实姓名" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="required">*</span>
+                                手机号码
+                            </label>
+                            <input type="tel" class="form-input" placeholder="请输入手机号码" maxlength="11" pattern="[0-9]{11}" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="required">*</span>
+                                期望贷款额度
+                            </label>
+                            <select class="form-select" required>
+                                <option value="">请选择额度范围</option>
+                                <option value="10-20 万">10-20 万元</option>
+                                <option value="20-30 万">20-30 万元</option>
+                                <option value="30-50 万">30-50 万元</option>
+                                <option value="50-70 万">50-70 万元</option>
+                                <option value="70-100 万">70-100 万元</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="required">*</span>
+                                期望用款时间
+                            </label>
+                            <select class="form-select" required>
+                                <option value="">请选择用款时间</option>
+                                <option value="立即">立即用款</option>
+                                <option value="3 天内">3 天内</option>
+                                <option value="1 周内">1 周内</option>
+                                <option value="1 个月内">1 个月内</option>
+                                <option value="暂不需要">暂不需要，先了解</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="required">*</span>
+                                工作性质
+                            </label>
+                            <select class="form-select" required>
+                                <option value="">请选择工作性质</option>
+                                <option value="上班族">上班族（企业员工）</option>
+                                <option value="公务员">公务员/事业单位</option>
+                                <option value="国企">国企/央企员工</option>
+                                <option value="个体户">个体工商户</option>
+                                <option value="企业主">小微企业主</option>
+                                <option value="自由职业">自由职业者</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">
+                                <span class="required">*</span>
+                                学历
+                            </label>
+                            <select class="form-select" required>
+                                <option value="">请选择学历</option>
+                                <option value="初中及以下">初中及以下</option>
+                                <option value="高中/中专">高中/中专</option>
+                                <option value="大专">大专</option>
+                                <option value="本科">本科</option>
+                                <option value="硕士及以上">硕士及以上</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">立即提交申请</button>
+                        
+                        <!-- 温馨提示移到按钮下方 -->
+                        <div class="warm-tip">
+                            <div class="warm-tip-title">💡 温馨提示</div>
+                            <div class="warm-tip-content">
+                                • 提交申请后，专业顾问将在 30 分钟内与您联系<br>
+                                • 请保持电话畅通，以便及时沟通贷款详情
+                            </div>
+                            <div class="warm-tip-disclaimer">
+                                实际额度和利率以最终审批结果为准
+                            </div>
+                        </div>
+                        
+                        <div class="form-tip">
+                            🔒 您的信息已加密保护，仅用于贷款审批
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- 底部说明 -->
+            <div class="footer-info">
+                <div class="footer-highlight">服务承诺</div>
+                <div>正规持牌机构 · 信息安全保障 · 无前期费用</div>
+                <div style="margin-top: 10px; color: #9ca3af;">
+                    实际额度和利率以最终审批结果为准
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 滚动到表单
+        function scrollToForm() {
+            document.getElementById('applyForm').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+        
+        // 表单提交处理
+        document.getElementById('creditForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 获取用户填写的信息
+            const formData = new FormData(this);
+            
+            alert('✅ 申请提交成功！\n\n我们的专业顾问将在 30 分钟内与您联系，请保持电话畅通。\n\n预计可贷额度：10-100 万元\n参考年化利率：3% 起\n可选分期：10-84 期\n最快当天放款');
+        });
+    </script>
+</body>
+</html>

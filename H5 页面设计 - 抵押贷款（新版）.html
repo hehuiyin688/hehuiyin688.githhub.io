@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>抵押贷款申请 - 合惠银</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .phone-frame { width: 375px; height: 812px; background: white; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; position: relative; }
+        .status-bar { height: 44px; background: linear-gradient(135deg, #059669 0%, #047857 100%); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; color: white; font-size: 12px; }
+        .nav-bar { height: 50px; background: linear-gradient(135deg, #059669 0%, #047857 100%); display: flex; align-items: center; padding: 0 15px; color: white; }
+        .back-btn { font-size: 20px; margin-right: 15px; cursor: pointer; }
+        .nav-title { font-size: 17px; font-weight: 600; flex: 1; text-align: center; padding-right: 20px; }
+        .content { padding: 20px; overflow-y: auto; height: calc(812px - 94px); background: linear-gradient(180deg, #f0fdf4 0%, #ffffff 100%); }
+        .notice-bar { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 12px 15px; margin: -20px -20px 20px -20px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #e65100; }
+        .notice-icon { font-size: 16px; }
+        .tabs { display: flex; background: white; border-radius: 12px; padding: 5px; margin-bottom: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+        .tab-item { flex: 1; padding: 12px; text-align: center; border-radius: 8px; cursor: pointer; font-size: 15px; font-weight: 600; transition: all 0.3s; }
+        .tab-item.active { background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; }
+        .tab-item:not(.active) { color: #6b7280; }
+        .hero-banner { background: linear-gradient(135deg, #059669 0%, #047857 100%); border-radius: 16px; padding: 20px; margin-bottom: 20px; color: white; position: relative; overflow: hidden; }
+        .speed-badge { display: inline-block; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #78350f; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 20px; margin-bottom: 12px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .hero-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+        .hero-subtitle { font-size: 14px; opacity: 0.95; margin-bottom: 16px; }
+        .cta-section { margin-bottom: 25px; }
+        .cta-button { width: 100%; padding: 18px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border: none; border-radius: 14px; font-size: 18px; font-weight: 800; cursor: pointer; transition: all 0.3s; box-shadow: 0 6px 20px rgba(245,158,11,0.4); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245,158,11,0.5); }
+        .cta-button:active { transform: scale(0.98); }
+        .cta-subtext { font-size: 12px; color: #6b7280; text-align: center; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .success-cases { margin-bottom: 25px; }
+        .section-title { font-size: 16px; font-weight: 700; color: #1f2937; margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
+        .case-card { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #f59e0b; }
+        .case-title { font-size: 14px; font-weight: 700; color: #78350f; margin-bottom: 10px; }
+        .case-detail { font-size: 12px; color: #92400e; line-height: 1.8; }
+        .case-highlight { color: #b45309; font-weight: 700; }
+        .advantages-section { margin-bottom: 25px; }
+        .advantage-item { display: flex; align-items: flex-start; gap: 12px; padding: 15px; background: white; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e5e7eb; transition: all 0.3s; }
+        .advantage-item:hover { border-color: #059669; box-shadow: 0 4px 12px rgba(5,150,105,0.1); }
+        .advantage-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #059669 0%, #047857 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; flex-shrink: 0; }
+        .advantage-text { flex: 1; }
+        .advantage-title { font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
+        .advantage-desc { font-size: 13px; color: #6b7280; line-height: 1.5; }
+        .form-section { margin-bottom: 25px; }
+        .form-card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .form-group { margin-bottom: 18px; }
+        .form-label { font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 8px; display: block; }
+        .required { color: #ef4444; margin-right: 4px; }
+        .form-input { width: 100%; padding: 14px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s; background: #f9fafb; }
+        .form-input:focus { outline: none; border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.1); background: white; }
+        .form-select { width: 100%; padding: 14px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; background: #f9fafb; cursor: pointer; transition: all 0.3s; }
+        .form-select:focus { outline: none; border-color: #059669; box-shadow: 0 0 0 3px rgba(5,150,105,0.1); background: white; }
+        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(5,150,105,0.3); margin-top: 10px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(5,150,105,0.4); }
+        .submit-btn:active { transform: scale(0.98); }
+        .form-tip { font-size: 12px; color: #6b7280; text-align: center; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .warm-tip { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 12px; padding: 15px; margin-top: 15px; border-left: 4px solid #f59e0b; }
+        .warm-tip-title { font-size: 13px; font-weight: 700; color: #78350f; margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+        .warm-tip-content { font-size: 12px; color: #92400e; line-height: 1.8; }
+        .warm-tip-disclaimer { font-size: 11px; color: #b45309; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #fcd34d; font-style: italic; }
+        .footer-info { background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%); padding: 20px 15px; margin: -20px -20px -20px -20px; font-size: 12px; color: #6b7280; text-align: center; line-height: 1.8; border-top: 1px solid #d1fae5; }
+        .footer-highlight { color: #059669; font-weight: 700; margin-bottom: 4px; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar"><span>中国移动</span><span>12:30</span><span>🔋 85%</span></div>
+        <div class="nav-bar"><div class="back-btn">←</div><div class="nav-title">抵押贷款申请</div></div>
+        <div class="content">
+            <div class="notice-bar"><span class="notice-icon">ℹ️</span><span>很高兴为您提供咨询服务，您的贷款由正规持牌机构审批放款</span></div>
+            <div class="tabs">
+                <div class="tab-item active" onclick="switchTab('house')">🏠 房产抵押</div>
+                <div class="tab-item" onclick="switchTab('car')">🚗 车辆抵押</div>
+            </div>
+            <div id="house-tab" class="tab-content active">
+                <div class="hero-banner">
+                    <div class="speed-badge">⚡ 最快 3 天放款</div>
+                    <div class="hero-title">🏠 房产抵押贷款</div>
+                    <div class="hero-subtitle">房产评估价 7 成 · 年化 2.8% 起 · 最长 20 年</div>
+                </div>
+                <div class="cta-section">
+                    <button class="cta-button" onclick="scrollToForm()">📝 免费评估额度</button>
+                    <div class="cta-subtext">🔒 专业评估师 · 信息加密保护</div>
+                </div>
+                <div class="success-cases">
+                    <div class="section-title"><span>✅</span><span>真实案例参考</span></div>
+                    <div class="case-card">
+                        <div class="case-title">李先生，45 岁，企业主 | 审批额度 350 万元</div>
+                        <div class="case-detail">年化利率：<span class="case-highlight">3.8%</span> | 分期：<span class="case-highlight">60 期（5 年）</span><br>月供：<span class="case-highlight">11,083 元</span>（先息后本）<br><small>用途：企业资金周转，抵押住宅公寓，先息后本压力小</small></div>
+                    </div>
+                    <div class="case-card">
+                        <div class="case-title">张女士，38 岁，上班族 | 审批额度 180 万元</div>
+                        <div class="case-detail">年化利率：<span class="case-highlight">3.5%</span> | 分期：<span class="case-highlight">240 期（20 年）</span><br>月供：<span class="case-highlight">10,430 元</span>（等额本息）<br><small>用途：家庭消费升级，抵押别墅排屋，期限长月供低</small></div>
+                    </div>
+                </div>
+                <div class="advantages-section">
+                    <div class="section-title"><span>✨</span><span>为什么选择房抵贷</span></div>
+                    <div class="advantage-item"><div class="advantage-icon">💰</div><div class="advantage-text"><div class="advantage-title">额度超高</div><div class="advantage-desc">房产评估价 7 成，住宅最高可贷 500 万，满足大额资金需求</div></div></div>
+                    <div class="advantage-item"><div class="advantage-icon">📉</div><div class="advantage-text"><div class="advantage-title">利率超低</div><div class="advantage-desc">年化 3.5% 起，比信用贷更低，大幅节省利息支出</div></div></div>
+                    <div class="advantage-item"><div class="advantage-icon">📅</div><div class="advantage-text"><div class="advantage-title">期限超长</div><div class="advantage-desc">最长 20 年分期，月供压力小，资金周转更灵活</div></div></div>
+                    <div class="advantage-item"><div class="advantage-icon">🏡</div><div class="advantage-text"><div class="advantage-title">不影响居住</div><div class="advantage-desc">抵押期间正常居住使用，还款后可解押恢复完整产权</div></div></div>
+                </div>
+                <div class="form-section" id="houseFormSection">
+                    <div class="section-title"><span>📝</span><span>免费评估房产额度</span></div>
+                    <div class="form-card">
+                        <form id="houseForm">
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 姓名</label><input type="text" class="form-input" placeholder="请输入您的真实姓名" required></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 手机号码</label><input type="tel" class="form-input" placeholder="请输入手机号码" maxlength="11" required></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 房产所在城市</label><input type="text" class="form-input" placeholder="例如：北京、上海、广州" required></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 房产类型</label><select class="form-select" required><option value="">请选择房产类型</option><option value="住宅">住宅公寓</option><option value="别墅">别墅排屋</option><option value="商铺">商铺写字楼</option><option value="厂房">厂房仓库</option></select></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 期望贷款额度</label><select class="form-select" required><option value="">请选择额度范围</option><option value="50-100 万">50-100 万元</option><option value="100-200 万">100-200 万元</option><option value="200-300 万">200-300 万元</option><option value="300-500 万">300-500 万元</option><option value="500 万以上">500 万元以上</option></select></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 期望用款时间</label><select class="form-select" required><option value="">请选择用款时间</option><option value="立即">立即用款</option><option value="1 周内">1 周内</option><option value="2 周内">2 周内</option><option value="1 个月内">1 个月内</option><option value="暂不需要">暂不需要，先评估</option></select></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 工作性质</label><select class="form-select" required><option value="">请选择工作性质</option><option value="上班族">上班族（企业员工）</option><option value="公务员">公务员/事业单位</option><option value="个体户">个体工商户</option><option value="企业主">小微企业主</option><option value="自由职业">自由职业者</option></select></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 学历</label><select class="form-select" required><option value="">请选择学历</option><option value="初中及以下">初中及以下</option><option value="高中/中专">高中/中专</option><option value="大专">大专</option><option value="本科">本科</option><option value="硕士及以上">硕士及以上</option></select></div>
+                            <button type="submit" class="submit-btn">免费获取评估报告</button>
+                            <div class="form-tip">🔒 您的信息已加密保护，仅用于贷款评估</div>
+                            <div class="warm-tip">
+                                <div class="warm-tip-title">💡 温馨提示</div>
+                                <div class="warm-tip-content">1. 提交申请后，专业评估师将在 30 分钟内与您联系，安排免费上门评估<br>2. 请提前准备房产证原件、身份证、收入证明等材料<br>3. 住宅公寓审批最快，别墅排屋额度更高，商铺写字楼需实地勘察</div>
+                                <div class="warm-tip-disclaimer">注：具体额度和利率以实际审批结果为准，本评估仅供参考</div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div id="car-tab" class="tab-content">
+                <div class="hero-banner">
+                    <div class="speed-badge">⚡ 最快当天放款</div>
+                    <div class="hero-title">🚗 车辆抵押贷款</div>
+                    <div class="hero-subtitle">爱车变现不卖车 · 年化 8% 起 · 不影响用车</div>
+                </div>
+                <div class="cta-section">
+                    <button class="cta-button" onclick="scrollToForm('carFormSection')">📝 免费评估额度</button>
+                    <div class="cta-subtext">🔒 线上快速评估 · 信息加密保护</div>
+                </div>
+                <div class="success-cases">
+                    <div class="section-title"><span>✅</span><span>真实案例参考</span></div>
+                    <div class="case-card">
+                        <div class="case-title">王先生，35 岁，个体户 | 审批额度 25 万元</div>
+                        <div class="case-detail">年化利率：<span class="case-highlight">8.5%</span> | 分期：<span class="case-highlight">36 期（3 年）</span><br>月供：<span class="case-highlight">7,890 元</span>（等额本息）<br><small>车型：宝马 3 系 2020 款 | 用途：店铺资金周转</small></div>
+                    </div>
+                    <div class="case-card">
+                        <div class="case-title">陈女士，32 岁，上班族 | 审批额度 15 万元</div>
+                        <div class="case-detail">年化利率：<span class="case-highlight">8.0%</span> | 分期：<span class="case-highlight">48 期（4 年）</span><br>月供：<span class="case-highlight">3,660 元</span>（等额本息）<br><small>车型：奔驰 C 级 2021 款 | 用途：家庭装修</small></div>
+                    </div>
+                </div>
+                <div class="advantages-section">
+                    <div class="section-title"><span>✨</span><span>为什么选择车抵贷</span></div>
+                    <div class="advantage-item"><div class="advantage-icon">🚗</div><div class="advantage-text"><div class="advantage-title">不影响用车</div><div class="advantage-desc">安装 GPS 后即可开走，日常使用不受影响</div></div></div>
+                    <div class="advantage-item"><div class="advantage-icon">⚡</div><div class="advantage-text"><div class="advantage-title">审批快速</div><div class="advantage-desc">资料齐全最快当天放款，紧急用款首选</div></div></div>
+                    <div class="advantage-item"><div class="advantage-icon">💰</div><div class="advantage-text"><div class="advantage-title">额度灵活</div><div class="advantage-desc">车辆评估价 5-8 成，最高 100 万，满足各类需求</div></div></div>
+                    <div class="advantage-item"><div class="advantage-icon">📋</div><div class="advantage-text"><div class="advantage-title">手续简单</div><div class="advantage-desc">身份证、行驶证、登记证即可申请</div></div></div>
+                </div>
+                <div class="form-section" id="carFormSection">
+                    <div class="section-title"><span>📝</span><span>免费评估车辆额度</span></div>
+                    <div class="form-card">
+                        <form id="carForm">
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 姓名</label><input type="text" class="form-input" placeholder="请输入您的真实姓名" required></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 手机号码</label><input type="tel" class="form-input" placeholder="请输入手机号码" maxlength="11" required></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 车辆品牌型号</label><input type="text" class="form-input" placeholder="例如：宝马 3 系 2020 款" required></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 车牌城市</label><input type="text" class="form-input" placeholder="例如：北京、上海、广州" required></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 期望贷款额度</label><select class="form-select" required><option value="">请选择额度范围</option><option value="5-10 万">5-10 万元</option><option value="10-20 万">10-20 万元</option><option value="20-30 万">20-30 万元</option><option value="30-50 万">30-50 万元</option><option value="50 万以上">50 万元以上</option></select></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 期望用款时间</label><select class="form-select" required><option value="">请选择用款时间</option><option value="立即">立即用款</option><option value="1 周内">1 周内</option><option value="2 周内">2 周内</option><option value="1 个月内">1 个月内</option><option value="暂不需要">暂不需要，先评估</option></select></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 工作性质</label><select class="form-select" required><option value="">请选择工作性质</option><option value="上班族">上班族（企业员工）</option><option value="公务员">公务员/事业单位</option><option value="个体户">个体工商户</option><option value="企业主">小微企业主</option><option value="自由职业">自由职业者</option></select></div>
+                            <div class="form-group"><label class="form-label"><span class="required">*</span> 学历</label><select class="form-select" required><option value="">请选择学历</option><option value="初中及以下">初中及以下</option><option value="高中/中专">高中/中专</option><option value="大专">大专</option><option value="本科">本科</option><option value="硕士及以上">硕士及以上</option></select></div>
+                            <button type="submit" class="submit-btn">免费获取评估报告</button>
+                            <div class="form-tip">🔒 您的信息已加密保护，仅用于贷款评估</div>
+                            <div class="warm-tip">
+                                <div class="warm-tip-title">💡 温馨提示</div>
+                                <div class="warm-tip-content">1. 提交申请后，评估师将在 30 分钟内与您联系<br>2. 请提前准备身份证、行驶证、车辆登记证<br>3. 车辆需无重大事故，手续齐全</div>
+                                <div class="warm-tip-disclaimer">注：具体额度和利率以实际审批结果为准</div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-info">
+                <div class="footer-highlight">🔒 信息安全保障</div>
+                <div>您的个人信息已加密存储，严格保密</div>
+                <div>咨询热线：400-xxx-xxxx | 服务时间：9:00-21:00</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-item').forEach(item => item.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+        }
+        function scrollToForm(sectionId = 'houseFormSection') {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+        document.getElementById('houseForm').addEventListener('submit', function(e) { e.preventDefault(); alert('感谢您的申请！评估师将在 30 分钟内联系您。'); });
+        document.getElementById('carForm').addEventListener('submit', function(e) { e.preventDefault(); alert('感谢您的申请！评估师将在 30 分钟内联系您。'); });
+    </script>
+</body>
+</html>

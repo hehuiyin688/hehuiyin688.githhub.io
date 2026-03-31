@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业贷款申请 - 合惠银</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; background: #f5f5f5; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; }
+        .phone-frame { width: 375px; height: 812px; background: white; border-radius: 40px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden; position: relative; }
+        .status-bar { height: 44px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); display: flex; justify-content: space-between; align-items: center; padding: 0 20px; color: white; font-size: 12px; }
+        .nav-bar { height: 50px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); display: flex; align-items: center; padding: 0 15px; color: white; }
+        .back-btn { font-size: 20px; margin-right: 15px; cursor: pointer; }
+        .nav-title { font-size: 17px; font-weight: 600; flex: 1; text-align: center; padding-right: 20px; }
+        .content { padding: 20px; overflow-y: auto; height: calc(812px - 94px); background: linear-gradient(180deg, #f0f9ff 0%, #ffffff 100%); }
+        .notice-bar { background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); padding: 12px 15px; margin: -20px -20px 20px -20px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #e65100; }
+        .notice-icon { font-size: 16px; }
+        .hero-banner { background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-radius: 16px; padding: 20px; margin-bottom: 20px; color: white; position: relative; overflow: hidden; }
+        .speed-badge { display: inline-block; background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%); color: #78350f; font-size: 13px; font-weight: 700; padding: 6px 12px; border-radius: 20px; margin-bottom: 12px; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .hero-title { font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+        .hero-subtitle { font-size: 14px; opacity: 0.95; margin-bottom: 16px; }
+        .cta-section { margin-bottom: 25px; }
+        .cta-button { width: 100%; padding: 18px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; border: none; border-radius: 14px; font-size: 18px; font-weight: 800; cursor: pointer; transition: all 0.3s; box-shadow: 0 6px 20px rgba(245,158,11,0.4); display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(245,158,11,0.5); }
+        .cta-button:active { transform: scale(0.98); }
+        .cta-subtext { font-size: 12px; color: #6b7280; text-align: center; margin-top: 12px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .success-cases { margin-bottom: 25px; }
+        .section-title { font-size: 16px; font-weight: 700; color: #1f2937; margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
+        .case-card { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 12px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #f59e0b; }
+        .case-title { font-size: 14px; font-weight: 700; color: #78350f; margin-bottom: 10px; }
+        .case-detail { font-size: 12px; color: #92400e; line-height: 1.8; }
+        .case-highlight { color: #b45309; font-weight: 700; }
+        .advantages-section { margin-bottom: 25px; }
+        .advantage-item { display: flex; align-items: flex-start; gap: 12px; padding: 15px; background: white; border-radius: 12px; margin-bottom: 10px; border: 1px solid #e5e7eb; transition: all 0.3s; }
+        .advantage-item:hover { border-color: #0284c7; box-shadow: 0 4px 12px rgba(2,132,199,0.1); }
+        .advantage-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; flex-shrink: 0; }
+        .advantage-text { flex: 1; }
+        .advantage-title { font-size: 15px; font-weight: 700; color: #1f2937; margin-bottom: 4px; }
+        .advantage-desc { font-size: 13px; color: #6b7280; line-height: 1.5; }
+        .form-section { margin-bottom: 25px; }
+        .form-card { background: white; border-radius: 14px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); }
+        .form-group { margin-bottom: 18px; }
+        .form-label { font-size: 14px; font-weight: 700; color: #1f2937; margin-bottom: 8px; display: block; }
+        .required { color: #ef4444; margin-right: 4px; }
+        .form-input { width: 100%; padding: 14px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; transition: all 0.3s; background: #f9fafb; }
+        .form-input:focus { outline: none; border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2,132,199,0.1); background: white; }
+        .form-select { width: 100%; padding: 14px 16px; border: 2px solid #e5e7eb; border-radius: 10px; font-size: 15px; background: #f9fafb; cursor: pointer; transition: all 0.3s; }
+        .form-select:focus { outline: none; border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2,132,199,0.1); background: white; }
+        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%); color: white; border: none; border-radius: 12px; font-size: 17px; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 15px rgba(2,132,199,0.3); margin-top: 10px; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(2,132,199,0.4); }
+        .submit-btn:active { transform: scale(0.98); }
+        .form-tip { font-size: 12px; color: #6b7280; text-align: center; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .warm-tip { background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-radius: 12px; padding: 15px; margin-top: 15px; border-left: 4px solid #f59e0b; }
+        .warm-tip-title { font-size: 13px; font-weight: 700; color: #78350f; margin-bottom: 8px; display: flex; align-items: center; gap: 4px; }
+        .warm-tip-content { font-size: 12px; color: #92400e; line-height: 1.8; }
+        .warm-tip-disclaimer { font-size: 11px; color: #b45309; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #fcd34d; font-style: italic; }
+        .footer-info { background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); padding: 20px 15px; margin: -20px -20px -20px -20px; font-size: 12px; color: #6b7280; text-align: center; line-height: 1.8; border-top: 1px solid #bae6fd; }
+        .footer-highlight { color: #0284c7; font-weight: 700; margin-bottom: 4px; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="status-bar"><span>中国移动</span><span>12:30</span><span>🔋 85%</span></div>
+        <div class="nav-bar"><div class="back-btn">←</div><div class="nav-title">企业贷款申请</div></div>
+        <div class="content">
+            <div class="notice-bar"><span class="notice-icon">ℹ️</span><span>很高兴为您提供咨询服务，您的贷款由正规持牌机构审批放款</span></div>
+            <div class="hero-banner">
+                <div class="speed-badge">⚡ 最快当天放款</div>
+                <div class="hero-title">💼 企业经营性贷款</div>
+                <div class="hero-subtitle">10-300 万额度 · 年化 3% 起 · 1-3 年期限</div>
+            </div>
+            <div class="cta-section">
+                <button class="cta-button" onclick="scrollToForm()">📝 免费获取融资方案</button>
+                <div class="cta-subtext">🔒 绿色审批通道 · 信息加密保护</div>
+            </div>
+            <div class="success-cases">
+                <div class="section-title"><span>✅</span><span>真实案例参考</span></div>
+                <div class="case-card">
+                    <div class="case-title">张总，42 岁，科技公司 | 审批额度 180 万元</div>
+                    <div class="case-detail">年化利率：<span class="case-highlight">4.8%</span> | 分期：<span class="case-highlight">36 期（3 年）</span><br>月供：<span class="case-highlight">7,200 元</span>（先息后本）<br><small>产品：税贷通 | 用途：采购原材料，凭纳税记录快速获批</small></div>
+                </div>
+                <div class="case-card">
+                    <div class="case-title">李总，38 岁，餐饮连锁 | 审批额度 120 万元</div>
+                    <div class="case-detail">年化利率：<span class="case-highlight">5.2%</span> | 分期：<span class="case-highlight">12 期（1 年）</span><br>月供：<span class="case-highlight">5,200 元</span>（先息后本）<br><small>产品：流水贷 | 用途：新店装修扩张，凭银行流水获批</small></div>
+                </div>
+            </div>
+            <div class="advantages-section">
+                <div class="section-title"><span>✨</span><span>为什么选择企业贷</span></div>
+                <div class="advantage-item"><div class="advantage-icon">💰</div><div class="advantage-text"><div class="advantage-title">额度充足</div><div class="advantage-desc">10-300 万额度，满足采购、扩店、发工资等经营需求</div></div></div>
+                <div class="advantage-item"><div class="advantage-icon">📉</div><div class="advantage-text"><div class="advantage-title">政策支持</div><div class="advantage-desc">响应普惠金融政策，利率优惠，审批快速</div></div></div>
+                <div class="advantage-item"><div class="advantage-icon">🔧</div><div class="advantage-text"><div class="advantage-title">担保灵活</div><div class="advantage-desc">信用/保证/抵押多种担保方式，匹配不同企业情况</div></div></div>
+                <div class="advantage-item"><div class="advantage-icon">⚡</div><div class="advantage-text"><div class="advantage-title">快速审批</div><div class="advantage-desc">资料齐全最快当天放款，不耽误生意时机</div></div></div>
+            </div>
+            <div class="form-section" id="applyFormSection">
+                <div class="section-title"><span>📝</span><span>免费获取融资方案</span></div>
+                <div class="form-card">
+                    <form id="applyForm">
+                        <div class="form-group"><label class="form-label"><span class="required">*</span> 姓名</label><input type="text" class="form-input" placeholder="请输入您的真实姓名" required></div>
+                        <div class="form-group"><label class="form-label"><span class="required">*</span> 手机号码</label><input type="tel" class="form-input" placeholder="请输入手机号码" maxlength="11" required></div>
+                        <div class="form-group"><label class="form-label"><span class="required">*</span> 期望贷款额度</label><select class="form-select" required><option value="">请选择额度范围</option><option value="10-50 万">10-50 万元</option><option value="50-100 万">50-100 万元</option><option value="100-200 万">100-200 万元</option><option value="200-300 万">200-300 万元</option><option value="300 万以上">300 万元以上</option></select></div>
+                        <div class="form-group"><label class="form-label"><span class="required">*</span> 企业名称</label><input type="text" class="form-input" placeholder="请输入营业执照上的企业全称" required></div>
+                        <div class="form-group"><label class="form-label"><span class="required">*</span> 企业经营年限</label><select class="form-select" required><option value="">请选择经营年限</option><option value="1 年以下">1 年以下</option><option value="1-3 年">1-3 年</option><option value="3-5 年">3-5 年</option><option value="5 年以上">5 年以上</option></select></div>
+                        <div class="form-group"><label class="form-label"><span class="required">*</span> 期望用款时间</label><select class="form-select" required><option value="">请选择用款时间</option><option value="立即">立即用款</option><option value="1 周内">1 周内</option><option value="2 周内">2 周内</option><option value="1 个月内">1 个月内</option><option value="暂不需要">暂不需要，先咨询</option></select></div>
+                        <div class="form-group"><label class="form-label"><span class="required">*</span> 学历</label><select class="form-select" required><option value="">请选择学历</option><option value="初中及以下">初中及以下</option><option value="高中/中专">高中/中专</option><option value="大专">大专</option><option value="本科">本科</option><option value="硕士及以上">硕士及以上</option></select></div>
+                        <button type="submit" class="submit-btn">免费获取融资方案</button>
+                        <div class="form-tip">🔒 您的信息已加密保护，仅用于贷款评估</div>
+                        <div class="warm-tip">
+                            <div class="warm-tip-title">💡 温馨提示</div>
+                            <div class="warm-tip-content">1. 提交申请后，客户经理将在 30 分钟内与您联系<br>2. 请提前准备营业执照、法人身份证、近一年流水<br>3. 纳税记录良好的企业可享受更低利率和更快审批</div>
+                            <div class="warm-tip-disclaimer">注：具体额度和利率以实际审批结果为准，本方案仅供参考</div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-info">
+                <div class="footer-highlight">🔒 信息安全保障</div>
+                <div>您的企业信息已加密存储，严格保密</div>
+                <div>咨询热线：400-xxx-xxxx | 服务时间：9:00-21:00</div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function scrollToForm() { document.getElementById('applyFormSection').scrollIntoView({ behavior: 'smooth' }); }
+        document.getElementById('applyForm').addEventListener('submit', function(e) { e.preventDefault(); alert('感谢您的申请！客户经理将在 30 分钟内联系您。'); });
+    </script>
+</body>
+</html>

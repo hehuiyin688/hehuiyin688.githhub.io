@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>贷款计算器 - 合惠银</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header { text-align: center; margin-bottom: 30px; }
+        .logo {
+            width: 80px; height: 80px;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 15px;
+            font-size: 40px; color: white; font-weight: bold;
+        }
+        h1 { color: #333; font-size: 28px; margin-bottom: 10px; }
+        .subtitle { color: #666; font-size: 14px; }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; color: #555; font-weight: 600; font-size: 15px; }
+        input, select {
+            width: 100%; padding: 15px; border: 2px solid #e0e0e0;
+            border-radius: 10px; font-size: 16px; transition: all 0.3s;
+        }
+        input:focus, select:focus {
+            outline: none; border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        .btn {
+            width: 100%; padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white; border: none; border-radius: 10px;
+            font-size: 18px; font-weight: bold; cursor: pointer;
+            transition: transform 0.2s; margin-top: 10px;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .result-section {
+            margin-top: 30px; padding: 25px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 15px; display: none;
+        }
+        .result-section.show { display: block; }
+        .result-title { text-align: center; color: #333; font-size: 22px; margin-bottom: 20px; font-weight: bold; }
+        .result-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 25px; }
+        .result-card {
+            background: white; padding: 20px; border-radius: 12px;
+            text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .result-label { font-size: 13px; color: #666; margin-bottom: 8px; }
+        .result-value { font-size: 24px; color: #667eea; font-weight: bold; }
+        .plan-section { margin-top: 25px; }
+        .plan-title { font-size: 18px; color: #333; margin-bottom: 15px; font-weight: bold; }
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .plan-table {
+            width: 100%; border-collapse: collapse;
+        }
+        .plan-table thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        .plan-table th { padding: 15px 10px; font-size: 14px; font-weight: 600; }
+        .plan-table td {
+            padding: 12px 10px; text-align: center;
+            border-bottom: 1px solid #f0f0f0; font-size: 13px;
+        }
+        .plan-table tbody tr:nth-child(even) { background: #f9f9f9; }
+        .toggle-btn {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: none;
+        }
+        .toggle-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+        .scroll-hint { text-align: center; color: #999; font-size: 12px; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">合</div>
+            <h1>贷款计算器</h1>
+            <p class="subtitle">快速计算您的月供和总利息</p>
+        </div>
+        
+        <form id="loanForm">
+            <div class="form-group">
+                <label for="amount">贷款金额（万元）</label>
+                <input type="number" id="amount" placeholder="例如：30" min="1" max="1000" step="0.1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="rate">年化利率（%）</label>
+                <input type="number" id="rate" placeholder="例如：3.5" min="0.1" max="36" step="0.01" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="years">贷款年限（年）</label>
+                <input type="number" id="years" placeholder="例如：5" min="1" max="30" step="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="method">还款方式</label>
+                <select id="method" required>
+                    <option value="equal-principal-interest">等额本息</option>
+                    <option value="equal-principal">等额本金</option>
+                    <option value="interest-first">先息后本</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn">开始计算</button>
+        </form>
+        
+        <div id="resultSection" class="result-section">
+            <h2 class="result-title">计算结果</h2>
+            
+            <div class="result-cards">
+                <div class="result-card">
+                    <div class="result-label">每月还款</div>
+                    <div class="result-value" id="monthlyPayment">-</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">总利息</div>
+                    <div class="result-value" id="totalInterest">-</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">还款总额</div>
+                    <div class="result-value" id="totalPayment">-</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-label">贷款期数</div>
+                    <div class="result-value" id="totalMonths">-</div>
+                </div>
+            </div>
+            
+            <div class="plan-section">
+                <h3 class="plan-title">还款计划表</h3>
+                <div class="table-container">
+                    <table class="plan-table">
+                        <thead>
+                            <tr>
+                                <th>期数</th>
+                                <th>还款金额</th>
+                                <th>本金</th>
+                                <th>利息</th>
+                            </tr>
+                        </thead>
+                        <tbody id="planBody"></tbody>
+                    </table>
+                </div>
+                <button id="toggleBtn" class="toggle-btn" onclick="togglePlan()">查看全部期数</button>
+                <p class="scroll-hint">💡 上下滚动查看还款计划</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        var isExpanded = false;
+        var totalPeriods = 0;
+        
+        function togglePlan() {
+            var planBody = document.getElementById('planBody');
+            var rows = planBody.getElementsByTagName('tr');
+            var btn = document.getElementById('toggleBtn');
+            
+            if (isExpanded) {
+                for (var k = 12; k < rows.length; k++) {
+                    rows[k].style.display = 'none';
+                }
+                btn.textContent = '查看全部 ' + totalPeriods + ' 期';
+            } else {
+                for (var i = 0; i < rows.length; i++) {
+                    rows[i].style.display = '';
+                }
+                btn.textContent = '收起，只显示前 12 期';
+            }
+            
+            isExpanded = !isExpanded;
+        }
+        
+        document.getElementById('loanForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var amountInput = document.getElementById('amount').value;
+            var rateInput = document.getElementById('rate').value;
+            var yearsInput = document.getElementById('years').value;
+            var method = document.getElementById('method').value;
+            
+            if (!amountInput || !rateInput || !yearsInput) {
+                alert('请填写完整的贷款信息');
+                return;
+            }
+            
+            var amount = parseFloat(amountInput) * 10000;
+            var annualRate = parseFloat(rateInput) / 100;
+            var years = parseInt(yearsInput);
+            
+            var totalMonths = years * 12;
+            var monthlyRate = annualRate / 12;
+            
+            var monthlyPayment = 0;
+            var totalInterest = 0;
+            var totalPayment = 0;
+            var schedule = [];
+            
+            if (method === 'equal-principal-interest') {
+                if (monthlyRate > 0) {
+                    monthlyPayment = amount * monthlyRate * Math.pow(1 + monthlyRate, totalMonths) / 
+                                   (Math.pow(1 + monthlyRate, totalMonths) - 1);
+                } else {
+                    monthlyPayment = amount / totalMonths;
+                }
+                totalPayment = monthlyPayment * totalMonths;
+                totalInterest = totalPayment - amount;
+                
+                var remainingPrincipal = amount;
+                for (var i = 1; i <= totalMonths; i++) {
+                    var interestPayment = remainingPrincipal * monthlyRate;
+                    var principalPayment = monthlyPayment - interestPayment;
+                    remainingPrincipal -= principalPayment;
+                    schedule.push({
+                        month: i, 
+                        payment: monthlyPayment, 
+                        principal: principalPayment, 
+                        interest: interestPayment
+                    });
+                }
+            } else if (method === 'equal-principal') {
+                var monthlyPrincipal = amount / totalMonths;
+                for (var i = 1; i <= totalMonths; i++) {
+                    var remainingPrincipal = amount - (i - 1) * monthlyPrincipal;
+                    var interestPayment = remainingPrincipal * monthlyRate;
+                    var payment = monthlyPrincipal + interestPayment;
+                    totalPayment += payment;
+                    schedule.push({
+                        month: i, 
+                        payment: payment, 
+                        principal: monthlyPrincipal, 
+                        interest: interestPayment
+                    });
+                }
+                totalInterest = totalPayment - amount;
+                monthlyPayment = schedule[0].payment;
+            } else if (method === 'interest-first') {
+                monthlyPayment = amount * monthlyRate;
+                totalPayment = monthlyPayment * totalMonths + amount;
+                totalInterest = totalPayment - amount;
+                for (var i = 1; i <= totalMonths; i++) {
+                    if (i === totalMonths) {
+                        schedule.push({
+                            month: i, 
+                            payment: amount + monthlyPayment, 
+                            principal: amount, 
+                            interest: monthlyPayment
+                        });
+                    } else {
+                        schedule.push({
+                            month: i, 
+                            payment: monthlyPayment, 
+                            principal: 0, 
+                            interest: monthlyPayment
+                        });
+                    }
+                }
+            }
+            
+            document.getElementById('monthlyPayment').textContent = '¥' + monthlyPayment.toLocaleString('zh-CN', {maximumFractionDigits: 2});
+            document.getElementById('totalInterest').textContent = '¥' + totalInterest.toLocaleString('zh-CN', {maximumFractionDigits: 2});
+            document.getElementById('totalPayment').textContent = '¥' + totalPayment.toLocaleString('zh-CN', {maximumFractionDigits: 2});
+            document.getElementById('totalMonths').textContent = totalMonths + '期';
+            
+            var planBody = document.getElementById('planBody');
+            planBody.innerHTML = '';
+            totalPeriods = totalMonths;
+            isExpanded = false;
+            
+            for (var j = 0; j < schedule.length; j++) {
+                var item = schedule[j];
+                var row = document.createElement('tr');
+                row.innerHTML = '<td>' + item.month + '</td>' +
+                               '<td>¥' + item.payment.toFixed(2) + '</td>' +
+                               '<td>¥' + item.principal.toFixed(2) + '</td>' +
+                               '<td>¥' + item.interest.toFixed(2) + '</td>';
+                
+                if (item.month > 12) {
+                    row.style.display = 'none';
+                }
+                
+                planBody.appendChild(row);
+            }
+            
+            var btn = document.getElementById('toggleBtn');
+            if (totalMonths > 12) {
+                btn.style.display = 'block';
+                btn.textContent = '查看全部 ' + totalMonths + ' 期';
+            } else {
+                btn.style.display = 'none';
+            }
+            
+            document.getElementById('resultSection').classList.add('show');
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
